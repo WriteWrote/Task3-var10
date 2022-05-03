@@ -17,65 +17,73 @@ using namespace std;
 */
 
 template<typename T>
-vector<T> quickSort(vector<T> list, MyComparator<T> &compar) {
-    //todo: использовать динамические массивы
-    // подредактировать сортировку
-    
+T* quickSort(T* arr, int size, MyComparator<T> &comp) {
+    //Указатели в начало и в конец массива
+    int i = 0;
+    int j = size - 1;
 
-    ////Указатели в начало и в конец массива
-    //int i = 0;
-    //int j = size - 1;
+    //Центральный элемент массива
+    T mid = arr[size / 2];
 
-    ////Центральный элемент массива
-    //int mid = mas[size / 2];
+    //Делим массив
+    do {
+        //Пробегаем элементы, ищем те, которые нужно перекинуть в другую часть
+        //В левой части массива пропускаем(оставляем на месте) элементы, которые меньше центрального
+        while (arr[i] < mid) {
+            i++;
+        }
+        //В правой части пропускаем элементы, которые больше центрального
+        while (arr[j] > mid) {
+            j--;
+        }
 
-    ////Делим массив
-    //do {
-    //    //Пробегаем элементы, ищем те, которые нужно перекинуть в другую часть
-    //    //В левой части массива пропускаем(оставляем на месте) элементы, которые меньше центрального
-    //    while (mas[i] < mid) {
-    //        i++;
-    //    }
-    //    //В правой части пропускаем элементы, которые больше центрального
-    //    while (mas[j] > mid) {
-    //        j--;
-    //    }
+        //Меняем элементы местами
+        if (i <= j) {
+            T tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
 
-    //    //Меняем элементы местами
-    //    if (i <= j) {
-    //        int tmp = mas[i];
-    //        mas[i] = mas[j];
-    //        mas[j] = tmp;
-
-    //        i++;
-    //        j--;
-    //    }
-    //} while (i <= j);
+            i++;
+            j--;
+        }
+    } while (i <= j);
 
 
-    ////Рекурсивные вызовы, если осталось, что сортировать
-    //if (j > 0) {
-    //    //"Левый кусок"
-    //    qsortRecursive(mas, j + 1);
-    //}
-    //if (i < size) {
-    //    //"Првый кусок"
-    //    qsortRecursive(&mas[i], size - i);
-    //}
-    
-    
+    //Рекурсивные вызовы, если осталось, что сортировать
+    if (j > 0) {
+        //левый кусок
+        quickSort(arr, j + 1, comp);
+    }
+    if (i < size) {
+        //правый кусок
+        quickSort(&arr[i], size - i, comp);
+    }
     
     // как терять объекты типа T, если они сложнее примитивов?
 
-    return list;
+    return arr;
 }
 
 int main()
 {
-    vector<string> intVec;
+    string *strArr = new string[4]{"str1","str2","STR1","STR2"};
+    int* intArr = new int[4]{12, 2, 31, 4};
+    
     MyComparator<string> strComp;
-    vector<string> resStr = quickSort(intVec, strComp);
-    intVec.clear();
+    MyComparator<int> intComp;
+    
+    string* resStr = quickSort(strArr, 4, strComp);
+    int* resInt = quickSort(intArr, 4, intComp);
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        cout << resStr[i] <<endl;
+    }
+    cout << endl;
+    for (size_t i = 0; i < 4; i++)
+    {
+        cout << resInt[i] << endl;
+    }
 
     return 0;
 }
